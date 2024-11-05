@@ -1,0 +1,40 @@
+/* SudokuBoard.css */
+.sudoku-board {
+  display: grid;
+  grid-template-columns: repeat(9, 40px);
+  grid-template-rows: repeat(9, 40px);
+  gap: 2px;
+  margin: 20px auto;
+  width: fit-content;
+}
+
+.sudoku-cell {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 20px;
+  border: 1px solid #ddd;
+}
+
+.sudoku-cell.editable {
+  background-color: #f9f9f9;
+}
+
+.sudoku-cell.conflict {
+  background-color: #ffdddd;
+}
+
+.difficulty-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.solve-button, .hint-button {
+  display: block;
+  margin: 10px auto;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}

@@ -1,10 +1,6 @@
 
-import SudokuBoard from './components/SudokuBoard';
+import SudokuBoard from './components/sudokuBoard/SudokuBoard';
 import './App.css';
-
-
-
-
 
 function App() {
 
