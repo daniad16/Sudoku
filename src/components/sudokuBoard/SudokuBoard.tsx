@@ -65,6 +65,47 @@ const SudokuBoard = () => {
         setConflicts(newConflicts);
     };
 
+    const checkSolution = () => {
+        for (let i = 0; i < GRID_SIZE; i++) {
+            const rowValues = new Set<number>();
+            const colValues = new Set<number>();
+    
+            for (let j = 0; j < GRID_SIZE; j++) {
+                if (grid[i][j] === null || rowValues.has(grid[i][j] as number)) {
+                    alert("The solution is incorrect.");
+                    return false;
+                }
+                rowValues.add(grid[i][j] as number);
+    
+                if (grid[j][i] === null || colValues.has(grid[j][i] as number)) {
+                    alert("The solution is incorrect.");
+                    return false;
+                }
+                colValues.add(grid[j][i] as number);
+            }
+        }
+    
+        for (let startRow = 0; startRow < GRID_SIZE; startRow += 3) {
+            for (let startCol = 0; startCol < GRID_SIZE; startCol += 3) {
+                const gridValues = new Set<number>();
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        const cellValue = grid[startRow + i][startCol + j];
+                        if (cellValue === null || gridValues.has(cellValue)) {
+                            alert("The solution is incorrect.");
+                            return false;
+                        }
+                        gridValues.add(cellValue);
+                    }
+                }
+            }
+        }
+    
+        alert("The solution is correct!");
+        return true;
+    };
+    
+
     const getMinFilledCells = (difficulty: string): number => {
         switch (difficulty) {
             case 'easy':
@@ -211,6 +252,7 @@ const SudokuBoard = () => {
 
             <div className="buttons-container">
                 <button onClick={handleSolve} className="button">Solve</button>
+                <button onClick={checkSolution} className="button">Check Solution</button>
                 <button onClick={handleHint} className="button">Hint</button>
                 <button onClick={generatePuzzle} className="button">Generate New Puzzle</button>
             </div>
