@@ -184,16 +184,13 @@ const SudokuBoard = () => {
     };
 
     const isSafe = (grid: CellValue[][], row: number, col: number, num: number): boolean => {
-        // التحقق من وجود الرقم في الصف أو العمود
         for (let x = 0; x < GRID_SIZE; x++) {
             if (grid[row][x] === num || grid[x][col] === num) return false;
         }
     
-        // حساب بداية المربع الفرعي 3x3
         const startRow = Math.floor(row / 3) * 3;
         const startCol = Math.floor(col / 3) * 3;
     
-        // التحقق من وجود الرقم في المربع الفرعي 3x3
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (grid[startRow + i][startCol + j] === num) return false;
@@ -205,33 +202,31 @@ const SudokuBoard = () => {
     
 
     const solveSudoku = (grid: CellValue[][]): boolean => {
-        // البحث عن الخلية الفارغة
+       
         for (let row = 0; row < GRID_SIZE; row++) {
             for (let col = 0; col < GRID_SIZE; col++) {
                 if (grid[row][col] === null) {
                     
-                    // تجربة الأرقام من 1 إلى 9
                     for (let num = 1; num <= 9; num++) {
                         if (isSafe(grid, row, col, num)) {
-                            grid[row][col] = num; // وضع الرقم
+                            grid[row][col] = num; 
                             
-                            if (solveSudoku(grid)) return true; // محاولة الحل المتبقية
+                            if (solveSudoku(grid)) return true; 
                             
-                            grid[row][col] = null; // التراجع إذا لم يُعثر على حل
+                            grid[row][col] = null; 
                         }
                     }
                     
-                    return false; // إرجاع `false` إذا لم ينجح أي رقم
+                    return false; 
                 }
             }
         }
         
-        return true; // إرجاع `true` إذا تم الحل بشكل صحيح
+        return true; 
     };
     
 
     const handleSolve = () => {
-         // إنشاء نسخة عميقة من الشبكة لضمان عدم التلاعب بالشبكة الأصلية
          // const newGrid = JSON.parse(JSON.stringify(grid));
         const newGrid = [...grid];
         if (solveSudoku(newGrid)) {
@@ -244,7 +239,6 @@ const SudokuBoard = () => {
     const handleHint = () => {
         const emptyCells: { row: number; col: number }[] = [];
     
-        // جمع جميع الخلايا الفارغة
         for (let row = 0; row < GRID_SIZE; row++) {
             for (let col = 0; col < GRID_SIZE; col++) {
                 if (grid[row][col] === null) {
@@ -252,16 +246,14 @@ const SudokuBoard = () => {
                 }
             }
         }
-    
-        // التحقق من وجود خلايا فارغة
+
         if (emptyCells.length > 0) {
-            // اختيار خلية عشوائية من الخلايا الفارغة
+            
             const { row, col } = emptyCells[Math.floor(Math.random() * emptyCells.length)];
             
-            // تجربة الأرقام من 1 إلى 9
             for (let num = 1; num <= 9; num++) {
                 if (isSafe(grid, row, col, num)) {
-                    const newGrid = [...grid]; // نسخة عميقة
+                    const newGrid = [...grid]; 
                     newGrid[row][col] = num;
                     setGrid(newGrid);
                     return;
@@ -273,30 +265,30 @@ const SudokuBoard = () => {
     };
     
 
-    // دالة معالجة تحميل الصورة
+    
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            // تحقق من أن الملف صورة
+            
             if (!file.type.startsWith("image/")) {
                 setOcrError("Please upload a valid image file.");
                 return;
             }
     
-            setLoading(true);  // عرض مؤشر التحميل أثناء معالجة الصورة
+            setLoading(true);  
     
             try {
                 const parsedBoard = await recognizeSudokuFromImage(file);
                 if (parsedBoard) {
-                    setGrid(parsedBoard);  // عرض الشبكة المعترَف بها
-                    setOcrError(null);     // إزالة أي رسائل خطأ سابقة
+                    setGrid(parsedBoard);  
+                    setOcrError(null);     
                 } else {
                     setOcrError("Could not recognize a Sudoku grid. Please upload a clearer image or check the image orientation.");
                 }
             } catch (error) {
                 setOcrError("An error occurred while processing the image. Please try again.");
             } finally {
-                setLoading(false);  // إخفاء مؤشر التحميل
+                setLoading(false);  
             }
         }
     };
